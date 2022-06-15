@@ -1,11 +1,17 @@
 class Api::V1::ItemsController < ApplicationController
     skip_before_action :verify_authenticity_token
+
     rescue_from ActiveRecord::RecordNotFound, :with => :render_404
     before_action :set_item, only: %i[ show edit update destroy ]
 
     def index
-        @items = Item.all
-        render json: @items
+        if request.GET != {}            
+            @items = Item.where(brand: request.GET[:brand])
+        else
+            @items = Item.all
+        end
+
+        render json: @items, status: 200
     end
 
     def show
