@@ -17,5 +17,4 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_10_130102) do
     t.string "name"
     t.string "brand"
   end
-
 end
