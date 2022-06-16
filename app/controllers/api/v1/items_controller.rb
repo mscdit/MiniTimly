@@ -41,10 +41,7 @@ class Api::V1::ItemsController < ApplicationController
     def destroy
         @item.destroy
 
-        respond_to do |format|
-            format.html { redirect_to items_url, notice: "Item was successfully destroyed." }
-            format.json { message: "Item with id #{params[:id]} deleted." }, status: 200
-        end
+        render json: { message: "Item with id #{params[:id]} deleted." }, status: 200
     end
 
     private
