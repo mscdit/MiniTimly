@@ -43,7 +43,7 @@ class Api::V1::ItemsController < ApplicationController
 
         respond_to do |format|
             format.html { redirect_to items_url, notice: "Item was successfully destroyed." }
-            format.json { head :no_content }
+            format.json { message: "Item with id #{params[:id]} deleted." }, status: 200
         end
     end
 
