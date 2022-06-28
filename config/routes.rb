@@ -1,8 +1,14 @@
 Rails.application.routes.draw do
   root 'welcome#index'
 
+  devise_for :users, :controllers => {:registrations => "users/registrations", :sessions => "users/sessions"}
+
+  get '/users/:id/profile', to: 'users/profiles#index'
+  get '/users/:id/profile/generateApiKey', to: 'users/profiles#generateApiKey'
+
   resources :items
 
+  # nested route for API
   namespace :api do
     namespace :v1 do
       resources :items

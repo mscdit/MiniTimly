@@ -1,6 +1,10 @@
-<div class="card" style="width: 18rem;">
+<div class="card" style="width: 25em;">
   <div class="card-body">
     <h5 class="card-title">Welcome to MiniTimly!</h5>
-    <p class="card-text">Use the navbar to do some testing ;-)</p>
+    <% if user_signed_in? %>
+    <p class="card-text">You are signed in with <%= current_user.email %></p>
+    <% else %>
+    <p class="card-text">Sign in to get access to your individual item list.</p>
+    <% end %>
   </div>
 </div>

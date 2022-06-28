@@ -3,7 +3,7 @@ class ItemsController < ApplicationController
 
   # GET /items or /items.json
   def index
-    @items = Item.all
+    @items = Item.where(user_id: current_user)
   end
 
   # GET /items/1 or /items/1.json
@@ -21,7 +21,19 @@ class ItemsController < ApplicationController
 
   # POST /items or /items.json
   def create
+    tmp = !(user_signed_in?)
+
+    if !(user_signed_in?)
+      respond_to do |format|
+        format.html { redirect_to root_url, alert: "Access denied." }
+        format.json { head :no_content }
+      end
+
+      return 
+    end
+
     @item = Item.new(item_params)
+    @item.user_id = current_user.id
 
     respond_to do |format|
       if @item.save
@@ -61,6 +73,13 @@ class ItemsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_item
       @item = Item.find(params[:id])
+
+      if @item.user_id != current_user&.id
+        respond_to do |format|
+          format.html { redirect_to root_url, alert: "Access denied." }
+          format.json { head :no_content }
+        end
+      end
     end
 
     # Only allow a list of trusted parameters through.

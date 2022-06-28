@@ -1,0 +1,11 @@
+<div class="card" style="">
+  <div class="card-body">
+    <h4 class="card-title">Login-Name: <%= @profile.user.email %></h4>
+    <br>
+    <p class="card-text">User-ID: <%= @profile.user_id %></p>
+    <p class="card-text">API-Key: <%= @profile.api_key %></p>
+    <%= form_with(url: '/users/' + current_user.id.to_s + '/profile/generateApiKey', method: :get) do |form| %>
+      <%= form.submit "(re)generate API-Key", class: "btn btn-secondary" %>
+    <% end %>
+  </div>
+</div>

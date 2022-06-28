@@ -30,14 +30,33 @@
                 <!--<li><hr class="dropdown-divider"></li>-->
               </ul>
             </li>
+            <li class="nav-item">
+              <% if user_signed_in? %>
+              <%= link_to 'My Profile', '/users/' + current_user.id.to_s + '/profile' , class: "nav-link" %>
+              <% else %>
+              <%= link_to 'Sign in', new_user_session_path, class: "nav-link" %>
+              <% end %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Sign out', destroy_user_session_path, data: { turbo_method: :delete }, class: "nav-link" %>
+            </li>
           </ul>
+          <!--
           <form class="d-flex" role="search">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
+          -->
         </div>
       </div>
     </nav>
+
+    <% if notice %>
+      <p class="alert alert-success"><%= notice %></p>
+    <% end %>
+    <% if alert %>
+      <p class="alert alert-danger"><%= alert %></p>
+    <% end %>
 
     <div style="margin: 20px">
       <%= yield %>
