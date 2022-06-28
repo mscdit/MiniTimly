@@ -26,11 +26,14 @@ class Api::V1::ItemsController < ApplicationController
 
 		@item.name = params[:name]
 		@item.brand = params[:brand]
+		@item.user_id = @current_user.id
 
 		@item.save
+
+		render json: { message: "Created item with id #{@item.id}." }, status: 200
 	end
 
-	# PUT /items/:id
+	# PATCH /items/:id
 	def update
 		@item.update(params.permit(:name, :brand))
 
