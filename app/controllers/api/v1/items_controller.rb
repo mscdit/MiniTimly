@@ -1,18 +1,18 @@
 class Api::V1::ItemsController < ApplicationController
   prepend_before_action :authenticate
-  before_action :set_item, only: %i[ show edit update destroy ]
-    
+  before_action :set_item, only: %i[show edit update destroy]
+
   # disable CSRF-TOKENS
   skip_before_action :verify_authenticity_token
 
-  rescue_from ActiveRecord::RecordNotFound, :with => :render_404
+  rescue_from ActiveRecord::RecordNotFound, with: :render_404
 
   def index
-    if request.GET != {}            
-      @items = Item.where(brand: request.GET[:brand], user_id: @current_user.id)
-    else
-      @items = Item.where(user_id: @current_user.id)
-    end
+    @items = if request.GET != {}
+               Item.where(brand: request.GET[:brand], user_id: @current_user.id)
+             else
+               Item.where(user_id: @current_user.id)
+             end
 
     render json: @items, status: 200
   end
@@ -47,14 +47,13 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
 
   def set_item
     @item = Item.find(params[:id])
 
-    if @item.user_id != @current_user&.id
-      render json: { message: "Access denied." }, status: 403
-    end
+    render json: { message: 'Access denied.' }, status: 403 if @item.user_id != @current_user&.id
   end
 
   def render_404
@@ -62,7 +61,7 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def authenticate
-    authenticate_with_http_token do |token, options|
+    authenticate_with_http_token do |token, _options|
       profile = Profile.find_by api_key: token
       @current_user = profile&.user
 
@@ -70,7 +69,7 @@ class Api::V1::ItemsController < ApplicationController
         # From the rails docs:
         # If a "before" filter renders or redirects, the action will not run.
         # If there are additional filters scheduled to run after that filter, they are also cancelled.
-        render json: { message: "Authentication failed." }, status: 403
+        render json: { message: 'Authentication failed.' }, status: 403
       end
     end
   end

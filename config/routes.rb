@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'welcome#index'
 
-  devise_for :users, :controllers => {:registrations => "users/registrations", :sessions => "users/sessions"}
+  devise_for :users, controllers: { registrations: 'users/registrations', sessions: 'users/sessions' }
 
   get '/users/:id/profile', to: 'users/profiles#index'
   get '/users/:id/profile/generateApiKey', to: 'users/profiles#generateApiKey'

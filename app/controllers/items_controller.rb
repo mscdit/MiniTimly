@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: %i[ show edit update destroy ]
+  before_action :set_item, only: %i[show edit update destroy]
 
   # GET /items or /items.json
   def index
@@ -7,8 +7,7 @@ class ItemsController < ApplicationController
   end
 
   # GET /items/1 or /items/1.json
-  def show
-  end
+  def show; end
 
   # GET /items/new
   def new
@@ -16,20 +15,19 @@ class ItemsController < ApplicationController
   end
 
   # GET /items/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /items or /items.json
   def create
-    tmp = !(user_signed_in?)
+    tmp = !user_signed_in?
 
-    if !(user_signed_in?)
+    unless user_signed_in?
       respond_to do |format|
-        format.html { redirect_to root_url, alert: "Access denied." }
+        format.html { redirect_to root_url, alert: 'Access denied.' }
         format.json { head :no_content }
       end
 
-      return 
+      return
     end
 
     @item = Item.new(item_params)
@@ -37,7 +35,7 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if @item.save
-        format.html { redirect_to item_url(@item), notice: "Item was successfully created." }
+        format.html { redirect_to item_url(@item), notice: 'Item was successfully created.' }
         format.json { render :show, status: :created, location: @item }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -50,7 +48,7 @@ class ItemsController < ApplicationController
   def update
     respond_to do |format|
       if @item.update(item_params)
-        format.html { redirect_to item_url(@item), notice: "Item was successfully updated." }
+        format.html { redirect_to item_url(@item), notice: 'Item was successfully updated.' }
         format.json { render :show, status: :ok, location: @item }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -64,27 +62,28 @@ class ItemsController < ApplicationController
     @item.destroy
 
     respond_to do |format|
-      format.html { redirect_to items_url, notice: "Item was successfully destroyed." }
+      format.html { redirect_to items_url, notice: 'Item was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_item
-      @item = Item.find(params[:id])
 
-      if @item.user_id != current_user&.id
-        respond_to do |format|
-          format.html { redirect_to root_url, alert: "Access denied." }
-          format.json { head :no_content }
-        end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_item
+    @item = Item.find(params[:id])
+
+    if @item.user_id != current_user&.id
+      respond_to do |format|
+        format.html { redirect_to root_url, alert: 'Access denied.' }
+        format.json { head :no_content }
       end
     end
+  end
 
-    # Only allow a list of trusted parameters through.
-    def item_params
-      params.require(:item).permit(:name, :brand)
-      #params.fetch(:item)
-    end
+  # Only allow a list of trusted parameters through.
+  def item_params
+    params.require(:item).permit(:name, :brand)
+    # params.fetch(:item)
+  end
 end

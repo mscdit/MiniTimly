@@ -174,7 +174,7 @@ Devise.setup do |config|
 
   # Options to be passed to the created cookie. For instance, you can set
   # secure: true in order to force SSL only cookies.
-  config.rememberable_options = {secure: false}
+  config.rememberable_options = { secure: false }
 
   # ==> Configuration for :validatable
   # Range for password length.
@@ -309,5 +309,5 @@ Devise.setup do |config|
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
 
-  Devise::TRUE_VALUES << ["on"]
+  Devise::TRUE_VALUES << ['on']
 end
