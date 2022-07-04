@@ -62,6 +62,8 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+
+  gem 'rspec-rails'
 end
 
 group :test do
@@ -74,3 +76,5 @@ end
 gem 'jwt'
 
 gem 'devise'
+
+gem 'rubocop', require: false
