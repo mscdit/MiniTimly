@@ -5,7 +5,7 @@ describe User do
     @user = create(:user)
   end
 
-  it "should create a new instance of a user given valid attributes" do
-    User.create!(@user.attributes)
+  it "should create the example user with correct email" do
+    expect(@user.email).to eq 'user4@example.com'
   end
 end
