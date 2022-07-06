@@ -1,5 +1,6 @@
 class Api::V1::ItemsController < ApplicationController
   prepend_before_action :authenticate
+  before_action :validate_accept
   before_action :set_item, only: %i[show edit update destroy]
 
   # disable CSRF-TOKENS
@@ -11,7 +12,8 @@ class Api::V1::ItemsController < ApplicationController
     @items = if request.GET != {}
                Item.where(brand: request.GET[:brand], user_id: @current_user.id)
              else
-               Item.where(user_id: @current_user.id)
+               #Item.where(user_id: @current_user.id)
+               Item.where(user_id: 1)
              end
 
     render json: @items, status: 200
@@ -53,7 +55,7 @@ class Api::V1::ItemsController < ApplicationController
   def set_item
     @item = Item.find(params[:id])
 
-    render json: { message: 'Access denied.' }, status: 403 if @item.user_id != @current_user&.id
+    #render json: { message: 'Access denied.' }, status: 403 if @item.user_id != @current_user&.id
   end
 
   def render_404
@@ -62,6 +64,7 @@ class Api::V1::ItemsController < ApplicationController
 
   def authenticate
     authenticate_with_http_token do |token, _options|
+
       profile = Profile.find_by api_key: token
       @current_user = profile&.user
 
@@ -71,6 +74,12 @@ class Api::V1::ItemsController < ApplicationController
         # If there are additional filters scheduled to run after that filter, they are also cancelled.
         render json: { message: 'Authentication failed.' }, status: 403
       end
+    end
+  end
+
+  def validate_accept
+    if request.accept != 'application/json' 
+      render json: { error: 'unsupported accept header' }, status: 406
     end
   end
 end
