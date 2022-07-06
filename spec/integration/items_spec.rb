@@ -26,7 +26,9 @@ describe 'Items API' do
         let(:Authorization) { "Bearer #{user.profile.api_key}" }
         let(:id) { Item.create(name: 'MacBook Pro', brand: 'Apple', user_id: user.id).id }
 
-        run_test!
+        run_test! do |response|
+          # futher tests possbile here
+        end
       end
 
       response '404', 'item not found' do
