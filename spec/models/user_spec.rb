@@ -6,6 +6,6 @@ describe User do
   end
 
   it 'should create the example user with correct email' do
-    expect(@user.email).to eq 'user4@example.com'
+    expect(@user.email).to eq 'max@mustermann.com'
   end
 end
