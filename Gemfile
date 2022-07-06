@@ -83,4 +83,4 @@ gem 'devise'
 
 gem 'rubocop', require: false
 
-gem "rswag", "~> 2.5"
+gem 'rswag', '~> 2.5'
