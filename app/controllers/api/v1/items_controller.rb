@@ -64,8 +64,6 @@ class Api::V1::ItemsController < ApplicationController
 
   def authenticate
     authenticate_with_http_token do |token, _options|
-      binding.break
-
       profile = Profile.find_by api_key: token
       @current_user = profile&.user
 
