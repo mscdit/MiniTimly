@@ -1,0 +1,57 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+components:
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+paths:
+  "/api/v1/items/{id}":
+    get:
+      summary: retrieves an item
+      tags:
+      - Items
+      security:
+      - Bearer: {}
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: item found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  created_at:
+                    type: datetime
+                  updated_at:
+                    type: datetime
+                  name:
+                    type: string
+                  brand:
+                    type: string
+                  user_id:
+                    type: integer
+                required:
+                - brand
+                - name
+        '404':
+          description: item not found
+        '406':
+          description: unsupported accept header
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000

@@ -18,7 +18,7 @@ describe 'Items API' do
                  brand: { type: :string },
                  user_id: { type: :integer }
                },
-               required: %w[id name brand]
+               required: ['brand', 'name']
 
         user = User.first_or_create(email: 'hans@mustermann.de', password: '123456', password_confirmation: '123456')
         user.create_profile(api_key: '123456xyz')
@@ -26,8 +26,8 @@ describe 'Items API' do
         let(:Authorization) { "Bearer #{user.profile.api_key}" }
         let(:id) { Item.create(name: 'MacBook Pro', brand: 'Apple', user_id: user.id).id }
 
-        run_test! do |response|
-          # futher tests possbile here
+        run_test! do
+          puts response.body
         end
       end
 
