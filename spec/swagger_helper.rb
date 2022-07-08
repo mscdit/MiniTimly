@@ -109,10 +109,10 @@ RSpec.configure do |config|
       paths: {},
       servers: [
         {
-          url: 'http://{defaultHost}',
+          url: 'https://{defaultHost}',
           variables: {
             defaultHost: {
-              default: 'localhost:3000'
+              default: 'timlyapi.schmid-it.net'
             }
           }
         }
