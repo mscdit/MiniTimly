@@ -2,7 +2,7 @@ require 'swagger_helper'
 
 describe 'Items API' do
   path '/api/v1/items' do
-    put 'creates an item' do
+    post 'creates an item' do
       tags 'items'
       security [ Bearer: {} ]
       description 'Creates a new item with given key/value data attributes.'
@@ -18,16 +18,21 @@ describe 'Items API' do
       produces 'application/json'
 
       response '200', 'Item created.' do
-        schema type: :object, properties: {
-          message: { type: :string }
-        }
-        example 'application/json', :example_key_2, {
-          id: 1,
-          title: 'Hello world!',
-          content: '...'
-        }, "Summary of the example", "Longer description of the example"
+        # example 'application/json', :example_key_2, {
+        #   id: 1,
+        #   title: 'Hello world!',
+        #   content: '...'
+        # }, "Summary of the example", "Longer description of the example"
 
-        run_test!
+        user = User.first_or_create(email: 'hans@mustermann.de', password: '123456', password_confirmation: '123456')
+        user.create_profile(api_key: '123456xyz')
+
+        let(:Authorization) { "Bearer #{user.profile.api_key}" }
+        let(:item) { {name: "iMac", brand: "Apple"} } 
+
+        run_test! do
+          puts response.body
+        end
       end
     end
   end
@@ -41,7 +46,7 @@ describe 'Items API' do
 
       response '200', 'item found' do
         # reference to item definition in swagger_helpber.rb
-        schema '$ref' => '#/schemas/item'
+        schema '$ref' => '#/components/schemas/item'
 
         user = User.first_or_create(email: 'hans@mustermann.de', password: '123456', password_confirmation: '123456')
         user.create_profile(api_key: '123456xyz')
@@ -54,14 +59,28 @@ describe 'Items API' do
         end
       end
 
+      response '401', 'invalid authorization' do
+        user = User.first_or_create(email: 'hans@mustermann.de', password: '123456', password_confirmation: '123456')
+        user.create_profile(api_key: '123456xyz')
+
+        let(:Authorization) { "Bearer !WRONG TOKEN!" }
+        let(:id) { Item.create(name: 'MacBook Pro', brand: 'Apple', user_id: user.id).id }
+
+        run_test! do
+          puts response.body
+        end
+      end
+
       response '404', 'item not found' do
         user = User.first_or_create(email: 'hans@mustermann.de', password: '123456', password_confirmation: '123456')
         user.create_profile(api_key: '123456xyz')
 
         let(:Authorization) { "Bearer #{user.profile.api_key}" }
-        let(:id) { 'invalid' }
+        let(:id) { '-1' }
 
-        run_test!
+        run_test! do
+          puts response.body
+        end
       end
 
       response '406', 'unsupported accept header' do
@@ -72,7 +91,9 @@ describe 'Items API' do
         let(:id) { user.id }
         let(:Accept) { 'application/foo' }
 
-        run_test!
+        run_test! do
+          puts response.body
+        end
       end
     end
   end

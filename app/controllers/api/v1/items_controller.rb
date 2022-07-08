@@ -74,8 +74,10 @@ class Api::V1::ItemsController < ApplicationController
         # From the rails docs:
         # If a "before" filter renders or redirects, the action will not run.
         # If there are additional filters scheduled to run after that filter, they are also cancelled.
-        render json: { message: 'Authentication failed.' }, status: 401
+        render json: { error: 'Authentication failed.' }, status: 401
       end
+
+      true
     end
   end
 

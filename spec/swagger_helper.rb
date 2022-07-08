@@ -28,6 +28,82 @@ RSpec.configure do |config|
             name: 'Authorization',
             in: :header
           }
+        },
+        schemas: {
+          item: {
+            type: 'object',
+            properties: {
+              item_id: { type: 'integer' },
+              name: { type: 'string' },
+              status: { type: 'string' },
+              remarks: { type: 'string' },
+              root_category: { 
+                type: 'object',
+                properties: {
+                  id: { type: 'integer' },
+                  name: { type: 'string' }
+                }
+              },
+              category: { 
+                type: 'object',
+                properties: {
+                  id: { type: 'integer' },
+                  name: { type: 'string' }
+                }
+              },
+              responsible: {
+                type: 'object',
+                properties: {
+                  id: { type: 'integer' },
+                  name: { type: 'string' }
+                }
+              },
+              location: {
+                type: 'object',
+                properties: {
+                  id: { type: 'integer' },
+                  name: { type: 'string' }
+                }
+              },
+              custom_attributes: {
+                type: 'object',
+                properties: {
+                  attribute_key1: { type: 'string' },
+                  attribute_key2: { type: 'string' },
+                  attribute_key3: { type: 'string' } 
+                }
+              },
+              barcode: { type: 'string' }
+            },
+            example: {
+              item_id: '12345',
+              name: 'Eves MacBook',
+              status: 'active',
+              remarks: 'some remarks',
+              root_category: {
+                id: '1234',
+                name: 'root_category name'
+              },
+              category: {
+                id: '5678',
+                name: 'category name'
+              },
+              responsible: {
+                id: '0815',
+                name: 'Eves service provider'
+              },
+              location: {
+                id: '123',
+                name: 'location xyz'
+              },
+              custom_attributes: {
+                custom_attribut_key1: 'value1', 
+                custom_attribut_key2: 'value2',
+                custom_attribut_key3: 'value3' 
+              },
+              barcode: '123456'
+            }
+          }
         }
       },
       paths: {},
@@ -41,82 +117,6 @@ RSpec.configure do |config|
           }
         }
       ],
-      schemas: {
-        item: {
-          type: 'object',
-          properties: {
-            item_id: { type: 'integer' },
-            name: { type: 'string' },
-            status: { type: 'string' },
-            remarks: { type: 'string' },
-            root_category: { 
-              type: 'object',
-              properties: {
-                id: { type: 'integer' },
-                name: { type: 'string' }
-              }
-            },
-            category: { 
-              type: 'object',
-              properties: {
-                id: { type: 'integer' },
-                name: { type: 'string' }
-              }
-            },
-            responsible: {
-              type: 'object',
-              properties: {
-                id: { type: 'integer' },
-                name: { type: 'string' }
-              }
-            },
-            location: {
-              type: 'object',
-              properties: {
-                id: { type: 'integer' },
-                name: { type: 'string' }
-              }
-            },
-            custom_attributes: {
-              type: 'object',
-              properties: {
-                attribute_key1: { type: 'string' },
-                attribute_key2: { type: 'string' },
-                attribute_key3: { type: 'string' } 
-              }
-            },
-            barcode: { type: 'string' }
-          },
-          example: {
-            item_id: '12345',
-            name: 'Eves MacBook',
-            status: 'active',
-            remarks: 'some remarks',
-            root_category: {
-              id: '1234',
-              name: 'root_category name'
-            },
-            category: {
-              id: '5678',
-              name: 'category name'
-            },
-            responsible: {
-              id: '0815',
-              name: 'Eves service provider'
-            },
-            location: {
-              id: '123',
-              name: 'location xyz'
-            },
-            custom_attributes: {
-              custom_attribut_key1: 'value1', 
-              custom_attribut_key2: 'value2',
-              custom_attribut_key3: 'value3' 
-            },
-            barcode: '123456'
-          }
-        }
-      }
     }
   }
 
