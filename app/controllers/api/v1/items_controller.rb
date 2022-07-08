@@ -63,7 +63,10 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def authenticate
-    authenticate_with_http_token do |token, _options|
+    json_error = { error: 'Authentication failed due to missing token.' }
+
+    # Hint: authenticate_with_http_token does not call login-procedure block, if token in AUTH-Header is nil ?!
+    authenticate_or_request_with_http_token('realm', json_error) do |token, _options|
       profile = Profile.find_by api_key: token
       @current_user = profile&.user
 
@@ -71,7 +74,7 @@ class Api::V1::ItemsController < ApplicationController
         # From the rails docs:
         # If a "before" filter renders or redirects, the action will not run.
         # If there are additional filters scheduled to run after that filter, they are also cancelled.
-        render json: { message: 'Authentication failed.' }, status: 403
+        render json: { message: 'Authentication failed.' }, status: 401
       end
     end
   end
