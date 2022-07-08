@@ -28,7 +28,8 @@ describe 'Items API' do
         user.create_profile(api_key: '123456xyz')
 
         let(:Authorization) { "Bearer #{user.profile.api_key}" }
-        let(:item) { {name: "iMac", brand: "Apple"} } 
+        let(:item) { {name: "iMac", brand: "Apple"} }
+        let(:Accept) { 'application/json' }
 
         run_test! do
           puts response.body
