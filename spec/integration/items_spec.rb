@@ -7,32 +7,25 @@ describe 'Items API' do
       security [ Bearer: {} ]
       description 'Creates a new item with given key/value data attributes.'
       consumes 'application/json'
-      parameter name: :item, in: :body, description: "test", schema: {
-        type: :object,
-        properties: {
-          name: { type: :string },
-          brand: { type: :string }
-        },
-        required: [ 'name', 'brand' ]
-      }
+      parameter name: :item, in: :body, schema: { '$ref' => '#/components/schemas/new_item' }, description: "Test"
       produces 'application/json'
 
+      let(:Authorization) { "Bearer #{@user.profile.api_key}" }
+      let(:item) { {name: "iMac", brand: "Apple"} }
+
+      before(:each) do
+        @user = FactoryBot.create(:user)
+      end
+
       response '200', 'Item created.' do
-        # example 'application/json', :example_key_2, {
-        #   id: 1,
-        #   title: 'Hello world!',
-        #   content: '...'
-        # }, "Summary of the example", "Longer description of the example"
-
-        user = User.first_or_create(email: 'hans@mustermann.de', password: '123456', password_confirmation: '123456')
-        user.create_profile(api_key: '123456xyz')
-
-        let(:Authorization) { "Bearer #{user.profile.api_key}" }
-        let(:item) { {name: "iMac", brand: "Apple"} }
-        let(:Accept) { 'application/json' }
-
+        schema type: :object,
+          properties: {
+            message: { type: :string, enum: ['Item created successfully.'] },
+            id: { type: :integer }
+          }
+      
         run_test! do
-          puts response.body
+           puts response.body
         end
       end
     end
@@ -45,15 +38,19 @@ describe 'Items API' do
       produces 'application/json'
       parameter name: :id, in: :path, type: :integer
 
+      let(:Authorization) { "Bearer #{@user.profile.api_key}" }
+      let(:id) { Item.create(name: 'MacBook Pro', brand: 'Apple', user_id: @user.id).id }
+      let(:item) { {name: "iMac", brand: "Apple"} }
+
+      before(:each) do
+        @user = FactoryBot.create(:user)
+      end
+
       response '200', 'item found' do
         # reference to item definition in swagger_helpber.rb
         schema '$ref' => '#/components/schemas/item'
 
-        user = User.first_or_create(email: 'hans@mustermann.de', password: '123456', password_confirmation: '123456')
-        user.create_profile(api_key: '123456xyz')
-
-        let(:Authorization) { "Bearer #{user.profile.api_key}" }
-        let(:id) { Item.create(name: 'MacBook Pro', brand: 'Apple', user_id: user.id).id }
+        let(:id) { Item.create(name: 'MacBook Pro', brand: 'Apple', user_id: @user.id).id }
 
         run_test! do
           puts response.body
@@ -61,22 +58,15 @@ describe 'Items API' do
       end
 
       response '401', 'invalid authorization' do
-        user = User.first_or_create(email: 'hans@mustermann.de', password: '123456', password_confirmation: '123456')
-        user.create_profile(api_key: '123456xyz')
-
         let(:Authorization) { "Bearer !WRONG TOKEN!" }
-        let(:id) { Item.create(name: 'MacBook Pro', brand: 'Apple', user_id: user.id).id }
-
+        
         run_test! do
           puts response.body
         end
       end
 
       response '404', 'item not found' do
-        user = User.first_or_create(email: 'hans@mustermann.de', password: '123456', password_confirmation: '123456')
-        user.create_profile(api_key: '123456xyz')
-
-        let(:Authorization) { "Bearer #{user.profile.api_key}" }
+        #let(:Authorization) { "Bearer #{@user.profile.api_key}" }
         let(:id) { '-1' }
 
         run_test! do
@@ -85,11 +75,6 @@ describe 'Items API' do
       end
 
       response '406', 'unsupported accept header' do
-        user = User.first_or_create(email: 'hans@mustermann.de', password: '123456', password_confirmation: '123456')
-        user.create_profile(api_key: '123456xyz')
-
-        let(:Authorization) { "Bearer #{user.profile.api_key}" }
-        let(:id) { user.id }
         let(:Accept) { 'application/foo' }
 
         run_test! do

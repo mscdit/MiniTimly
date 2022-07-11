@@ -103,16 +103,34 @@ RSpec.configure do |config|
               },
               barcode: '123456'
             }
+          },
+          new_item: {
+            type: 'object',
+            properties: {
+              ref_no: { type: 'string' },
+              name: { type: 'string' },
+              root_category: { type: 'string' },
+              category: { type: 'string' },
+              status: { type: 'string' }
+            },
+            example: {
+              ref_no: 'external (custom/optional) reference id',
+              name: 'MacBook Pro Mid 2009',
+              root_category: 'IT-Clients',
+              category: 'Laptops',
+              status: 'active'
+            }
           }
         }
       },
       paths: {},
       servers: [
         {
-          url: 'https://{defaultHost}',
+          url: 'http://{defaultHost}',
           variables: {
             defaultHost: {
-              default: 'timlyapi.schmid-it.net'
+              default: 'localhost:3000'
+              #default: 'timlyapi.schmid-it.net'
             }
           }
         }

@@ -82,6 +82,25 @@ components:
           custom_attribut_key2: value2
           custom_attribut_key3: value3
         barcode: '123456'
+    new_item:
+      type: object
+      properties:
+        ref_no:
+          type: string
+        name:
+          type: string
+        root_category:
+          type: string
+        category:
+          type: string
+        status:
+          type: string
+      example:
+        ref_no: external (custom/optional) reference id
+        name: MacBook Pro Mid 2009
+        root_category: IT-Clients
+        category: Laptops
+        status: active
 paths:
   "/api/v1/items":
     post:
@@ -95,19 +114,22 @@ paths:
       responses:
         '200':
           description: Item created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                    - Item created successfully.
+                  id:
+                    type: integer
       requestBody:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                brand:
-                  type: string
-              required:
-              - name
-              - brand
+              "$ref": "#/components/schemas/new_item"
   "/api/v1/items/{id}":
     get:
       summary: retrieves an item
@@ -135,7 +157,7 @@ paths:
         '406':
           description: unsupported accept header
 servers:
-- url: https://{defaultHost}
+- url: http://{defaultHost}
   variables:
     defaultHost:
-      default: timlyapi.schmid-it.net
+      default: localhost:3000

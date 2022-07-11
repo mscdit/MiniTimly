@@ -32,7 +32,7 @@ class Api::V1::ItemsController < ApplicationController
 
     @item.save
 
-    render json: { message: "Created item with id #{@item.id}." }, status: 200
+    render json: { message: "Item created successfully.", id: @item.id }, status: 200
   end
 
   # PATCH /items/:id
